@@ -9,7 +9,16 @@ setup(
     python_requires='>=3.6',
     install_requires=[
         'click',
+        'coloredlogs',
         'numpy',
         'pandas',
-    ]
+        'tables',
+        'tqdm'
+    ], 
+    entry_points={
+        'console_scripts': [
+            'convert=neubio.convert:main',
+            'extract=neubio.extract:main'
+        ]
+    }
 )
