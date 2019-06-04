@@ -16,6 +16,9 @@ import pandas as pd
 logger = logging.getLogger(__name__)
 
 
+__all__ = ["read_signal3"]
+
+
 def write_frame(fd, frame_no, df):
     """
     Write DataFrame to HDF5.
