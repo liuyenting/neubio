@@ -18,7 +18,8 @@ setup(
     entry_points={
         'console_scripts': [
             'convert=neubio.convert:main',
-            'extract=neubio.extract:main'
+            'regroup=neubio.regroup:main'
+            'saveas=neubio.saveas:main'
         ]
     }
 )

@@ -1,3 +1,6 @@
+"""
+Convert Signal3 ASCII files to HDF5.
+"""
 from io import StringIO
 from enum import auto, Enum
 import logging
