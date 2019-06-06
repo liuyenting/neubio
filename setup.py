@@ -7,11 +7,19 @@ setup(
     author="Andy",
     packages=find_packages(),
     python_requires=">=3.6",
-    install_requires=["click", "coloredlogs", "numpy", "pandas", "tables", "tqdm"],
+    install_requires=[
+        "click",
+        "coloredlogs",
+        "matplotlib",
+        "numpy",
+        "pandas",
+        "tables",
+        "tqdm",
+    ],
     entry_points={
         "console_scripts": [
-            "convert=neubio.convert:main",
-            "regroup=neubio.regroup:main" "saveas=neubio.saveas:main",
+            "convert=neubio.cli.convert:main",
+            "dataset=neubio.cli.dataset:main",
         ]
     },
 )

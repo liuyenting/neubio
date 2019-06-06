@@ -28,7 +28,7 @@ def write_frame(fd, frame_no, df):
         frame_no (int): Frame number.
         df (pandas.DataFrame): Recorded channel data.
     """
-    g_name = "frame_{}".format(frame_no)
+    g_name = "_frames/{}".format(frame_no)
     logger.info("writing {}".format(g_name))
     df.to_hdf(fd, g_name)
 
@@ -40,6 +40,12 @@ def scan_for_frames(path, header=r'".*\.cfs","Frame (\d+)"'):
     Args:
         path (str): Signal3 exported ASCII file path.
         header (str): Header regular expression formula.
+    
+    Yields:
+        :rtype: (int, StringIO): Frame number and its extracted raw data string.
+    
+    Note:
+        The raw data string does not contain header.
     """
 
     class ScannerState(Enum):
@@ -84,6 +90,9 @@ def read_signal3(path, col_def, sep=","):
         path (str): Signal3 exported ASCII file path.
         col_def (dict): Desired column name and data format.
         sep (str, optional): Separator used in the file. Default to ','
+    
+    Yields:
+        :rtype: (int, DataFrame): Frame number and its parsed DataFrame.
     """
     logger.debug(path)
     logger.info("reading raw data")
@@ -94,7 +103,7 @@ def read_signal3(path, col_def, sep=","):
 
 
 @click.command()
-@click.argument("path")
+@click.argument("path", type=click.Path(exists=True, dir_okay=False, resolve_path=True))
 @click.option("-v", "--verbose", count=True)
 def main(path, verbose):
     if verbose == 0:
@@ -104,7 +113,7 @@ def main(path, verbose):
     else:
         verbose = "DEBUG"
     coloredlogs.install(
-        level="info", fmt="%(asctime)s %(levelname)s %(message)s", datefmt="%H:%M:%S"
+        level=verbose, fmt="%(asctime)s %(levelname)s %(message)s", datefmt="%H:%M:%S"
     )
 
     col_def = {"time": np.float32, "response": np.float32, "stimuli": np.float32}
