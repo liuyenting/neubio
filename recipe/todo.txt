@@ -1,0 +1,47 @@
+# pharmacology
+## goal
+- investigate glutamate receptor properties
+- application of blockers to reveal how receptors influence epsp
+
+## protocol
+- acsf
+- acsf, dnqx
+- acsf(mg-free), dnqx
+- acsf(mg-free), dnqx, ap5 
+- acsf(mg-free), dnqx, ap5, ttx
+
+## requirements
+present 4 baseline graphs
+
+---
+
+# calcium
+## goal
+investigate how calcium concentration affect presynaptic neurotransmitter releasing mechanism using paired epsp
+
+## protocol
+- 2.5mM
+- 0.5mM
+- 5mM
+
+## requirements
+present slope ratio
+
+---
+
+# ltp
+## goal
+- nmda open / ampa recruiment
+- intense stimulation (hfs) causing hyper-depolrization, result in prolonged & enlarged epsp response
+
+## requirement
+graph + slope, bar statistics
+
+---
+
+# ltd
+## protocol
+1hz (15min)
+
+## requirement
+graph + slope, bar statistics
