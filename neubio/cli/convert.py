@@ -28,9 +28,10 @@ def write_frame(fd, frame_no, df):
         frame_no (int): Frame number.
         df (pandas.DataFrame): Recorded channel data.
     """
-    g_name = "_frames/{}".format(frame_no)
+    g_name = "/_frames/{}".format(frame_no)
     logger.info("writing {}".format(g_name))
-    df.to_hdf(fd, g_name)
+    # df.to_hdf(fd, g_name)
+    fd.put(g_name, df, format="fixed")
 
 
 def scan_for_frames(path, header=r'".*\.cfs","Frame (\d+)"'):
