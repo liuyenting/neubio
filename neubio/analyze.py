@@ -9,8 +9,13 @@ __all__ = ["epsp_slope", "find_epsp_peak"]
 logger = logging.getLogger(__name__)
 
 
-def _find_nearest_index(y, y0):
-    return np.argmin(np.abs(y - y0))
+def _find_nearest_index(y, y0, ipk, reversed=True):
+    """
+    Use zero crossing detector to find the closest y.
+    """
+    iz = np.where(np.diff(np.sign(y - y0)))[0]
+    iiz = np.argmin(np.abs(iz - ipk))
+    return iz[iiz]
 
 
 def _estimate_ts(t):
@@ -19,26 +24,32 @@ def _estimate_ts(t):
     return np.mean(dt)
 
 
-def find_epsp_peak(t, y, thre=0.2, dist=0.001, w=0.005):
+def find_epsp_peak(t, y, delay=0.005):
     """
     Find EPSP peak location.
 
     Args:
         t (ndarray): Timestamps.
         y (ndarray): Recordings.
-        thr (float): EPSP maximum search range.
-        dist (float): Minimal time differences between peaks.
-        w (float): Required time width of peaks.
+        delay (float): EPSP search range delay.
     """
     # convert to unit samples
     ts = _estimate_ts(t)
     logger.debug("estimated sampling interval {:.4E}s".format(ts))
-    dist, w = dist / ts, w / ts
+    
+    if np.abs(y.max()) < np.abs(y.min()):
+        logger.info("search in reversed polarity")
+        y = -y
 
-    peaks, props = find_peaks(y, distance=dist, width=w)
-    if len(peaks) == 0:
-        logger.info("searching in reversed polarity")
-        peaks, props = find_peaks(-y, distance=dist, width=w)
+    # ignore delay
+    delay = int(delay/ts)
+
+    # peak height must over 3*std (99%)
+    ystd = np.std(y[delay:])
+    h = 2 * ystd
+
+    peaks, props = find_peaks(y[delay:], height=h)
+    peaks += delay
 
     # identify candidate
     if len(peaks) > 1:
@@ -69,7 +80,10 @@ def epsp_slope(t, y, ip, pct=0.2, yf=None, return_pos=False):
     ymin, ymax = pct * ypeak, (1 - pct) * ypeak
     logger.info("intensity window [{:.4E}, {:.4E}]".format(ymin, ymax))
 
-    imin, imax = (_find_nearest_index(y[:ip], ymin), _find_nearest_index(y[:ip], ymax))
+    imin, imax = (
+        _find_nearest_index(y[:ip], ymin, ip),
+        _find_nearest_index(y[:ip], ymax, ip),
+    )
 
     logger.info("linreg over @[{}, {}]".format(imin, imax))
 

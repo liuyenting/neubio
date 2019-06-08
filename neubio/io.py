@@ -18,6 +18,8 @@ def _load_frame_group(path, group="/_frames", index=None):
             start, end = index
         except TypeError:
             start, end = int(keys[0]), int(keys[-1])
+        if end < 0:
+            end = int(keys[-1])
         logger.info('loading "{}" ({}->{})'.format(group, start, end))
         ignored = 0
         for frame_no in range(start, end + 1):
