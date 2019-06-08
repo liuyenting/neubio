@@ -6,12 +6,15 @@ from enum import auto, Enum
 import logging
 import os
 import re
+import warnings
 
 import click
 import coloredlogs
-import h5py
 import numpy as np
 import pandas as pd
+import tables
+
+warnings.simplefilter('ignore', tables.NaturalNameWarning)
 
 logger = logging.getLogger(__name__)
 
