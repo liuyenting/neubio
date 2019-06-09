@@ -24,6 +24,19 @@ fig, ax = plt.subplots()
 
 
 def preprocess(index, crop):
+    """
+    Preprocess data directly from file.
+
+    Args:
+        index (ndarray): Frame range to extract, must be contiguous.
+        crop (tuple): Timestamp range for coarse croping.
+    
+    Returns:
+        (tuple): tuple containing:
+            t (ndarray): Cropped timestamp.
+            rec (ndarray): Raw recordings.
+            rec_filt (ndarray): Filtered recordings.
+    """
     # load data
     t, stim, rec = load_frame_group(path, index=index, stacked=False)
     # apply filter
@@ -63,9 +76,7 @@ def compare_plot(indice, labels, name="untitled", **kwargs):
         try:
             # using filtered signal to extract slope
             ipk, _ = find_epsp_peak(t, rec_filt)
-            ax.scatter(
-                t[ipk], rec[ipk], marker="o", edgecolors="k", facecolor="none"
-            )
+            ax.scatter(t[ipk], rec[ipk], marker="o", edgecolors="k", facecolor="none")
 
             # slope
             slope, r, dt, dy = epsp_slope(t, rec, ipk, yf=rec_filt, return_pos=True)
@@ -79,18 +90,12 @@ def compare_plot(indice, labels, name="untitled", **kwargs):
     plt.savefig("{}.png".format(name), dpi=300)
     plt.waitforbuttonpress()
 
-path = "../data/04_ltp_ltd/trial_4.h5"
-compare_plot(
-    [(41, 86), (94, 184)], ["Baseline", "Post-HFS"], "ltp_post_hfs"
-)
-compare_plot(
-    [(41, 86), (185, 220)], ["Baseline", "LTP"], "ltp_stable"
-)
 
-path = "../data/04_ltp_ltd/trial_5.h5"
-compare_plot(
-    [(41, 86), (846, 936)], ["Baseline", "Post-LFS"], "ltd_post_lfs"
-)
-compare_plot(
-    [(34, 95), (937, 982)], ["Baseline", "LTD"], "ltd_stable"
-)
+path = "../data/03_ltp_ltd/trial_4.h5"
+compare_plot([(41, 86), (94, 184)], ["Baseline", "Post-HFS"], "ltp_post_hfs")
+compare_plot([(41, 86), (185, 220)], ["Baseline", "LTP"], "ltp_stable")
+
+path = "../data/03_ltp_ltd/trial_5.h5"
+compare_plot([(41, 86), (846, 936)], ["Baseline", "Post-LFS"], "ltd_post_lfs")
+compare_plot([(34, 95), (937, 982)], ["Baseline", "LTD"], "ltd_stable")
+

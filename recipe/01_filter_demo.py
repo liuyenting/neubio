@@ -16,7 +16,7 @@ coloredlogs.install(
 
 
 ### data source
-path = "../data/01_epsp/trial_1.h5"
+path = "../data/00_epsp/trial_1.h5"
 
 ### filter
 fs = 10e3

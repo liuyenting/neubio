@@ -17,7 +17,7 @@ coloredlogs.install(
 
 
 ### data source
-path = "../data/02_drug/trial_2.h5"
+path = "../data/01_drug/trial_2.h5"
 
 ### filter
 fs = 10e3
