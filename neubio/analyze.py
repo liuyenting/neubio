@@ -9,9 +9,14 @@ __all__ = ["epsp_slope", "find_epsp_peak"]
 logger = logging.getLogger(__name__)
 
 
-def _find_nearest_index(y, y0, ipk, reversed=True):
+def _find_nearest_index(y, y0, ipk):
     """
     Use zero crossing detector to find the closest y.
+
+    Args:
+        y (ndarray): Recordings.
+        y0 (float): Cross over threshold.
+        ipk (int): Index of the peak.
     """
     iz = np.where(np.diff(np.sign(y - y0)))[0]
     iiz = np.argmin(np.abs(iz - ipk))
@@ -19,7 +24,12 @@ def _find_nearest_index(y, y0, ipk, reversed=True):
 
 
 def _estimate_ts(t):
-    """Estimate sampling interval."""
+    """
+    Estimate sampling interval.
+
+    Args:
+        t (ndarray): Timestamps.
+    """
     dt = t[1:] - t[:-1]
     return np.mean(dt)
 
@@ -31,18 +41,18 @@ def find_epsp_peak(t, y, delay=0.005):
     Args:
         t (ndarray): Timestamps.
         y (ndarray): Recordings.
-        delay (float): EPSP search range delay.
+        delay (float, optional): EPSP search range delay.
     """
     # convert to unit samples
     ts = _estimate_ts(t)
     logger.debug("estimated sampling interval {:.4E}s".format(ts))
-    
+
     if np.abs(y.max()) < np.abs(y.min()):
         logger.info("search in reversed polarity")
         y = -y
 
     # ignore delay
-    delay = int(delay/ts)
+    delay = int(delay / ts)
 
     # peak height must over 3*std (99%)
     ystd = np.std(y[delay:])
