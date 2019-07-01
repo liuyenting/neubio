@@ -83,24 +83,23 @@ def compare_plot(indice, labels, name="untitled", **kwargs):
     plt.savefig("{}.png".format(name), dpi=300)
     plt.waitforbuttonpress()
 
-"""
-compare_plot([(11, 123), (244, 254)], ["Baseline", "DNQX treatment"], "1_ampa_no-ampa")
 
-"""
+compare_plot([(11, 123), (244, 254)], ["Control", "DNQX treatment"], "1_ampa_no-ampa")
+
+
+
 
 compare_plot(
-    [(11, 123), (441, 476)], ["Baseline", "Mg$^{2+}$ free ACSF"], "2_ampa_nmda"
+    [(11, 123), (441, 476)], ["Control", "Mg$^{2+}$ free ACSF"], "2_ampa_nmda"
 )
 
 
-"""
 compare_plot(
-    [(441, 476), (500, 537)], ["Baseline", "AP5 treatment"], "3_nmda_no-nmda"
+    [(441, 476), (500, 537)], ["Mg$^{2+}$ free ACSF", "AP5 treatment"], "3_nmda_no-nmda"
 )
-"""
 
-"""
+
 compare_plot(
-    [(11, 123), (441, 476), (538, -1)], ["Baseline", "Mg$^{2+}$ free ACSF", "TTX treatment"], "4_ampa_nmda_none"
+    [(11, 123), (441, 476), (538, -1)], ["Control", "Mg$^{2+}$ free ACSF", "TTX treatment"], "4_ampa_nmda_none"
 )
-"""
+
