@@ -22,7 +22,7 @@ path = "../data/00_epsp/trial_1.h5"
 
 ### filter
 fs = 10e3
-lo_cutoff = 500
+lo_cutoff = 1e3
 
 ### plotter
 fig, ax = plt.subplots()
@@ -72,6 +72,11 @@ def main(index, name="filter_demo_sink"):
 
     ax.plot(dt, dy, "b:", label="EPSP slope", linewidth=1)
 
+    # labels
+    ax.legend()
+    plt.xlabel("Time (s)")
+    plt.ylabel("Intensity (mV)")
+
     # create inset
     axin = inset_axes(ax, width="30%", height="50%", loc=4, borderpad=3)
 
@@ -92,7 +97,6 @@ def main(index, name="filter_demo_sink"):
     axin.set_xlim((0.1025, 0.1100))
 
     # final adjust
-    ax.legend()
     ax.set_xlim(crop)
 
     plt.savefig("{}_slope-{:.3f}_r-{:.3f}.png".format(name, slope, r), dpi=300)

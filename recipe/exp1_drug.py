@@ -58,7 +58,7 @@ def compare_plot(indice, labels, name="untitled", **kwargs):
     coarse_crop = (0.1, 0.15)
     ax.axhline(0, color="k", linestyle=":", linewidth=0.5)
 
-    for index, label, c in zip(indice, labels, ["r", "b"]):
+    for index, label, c in zip(indice, labels, ["r", "b", "k"]):
         t, rec, rec_filt = preprocess(index, coarse_crop)
 
         # visualize data
@@ -67,9 +67,7 @@ def compare_plot(indice, labels, name="untitled", **kwargs):
         try:
             # using filtered signal to extract slope
             ipk, _ = find_epsp_peak(t, rec_filt)
-            ax.scatter(
-                t[ipk], rec[ipk], marker="o", edgecolors="k", facecolor="none"
-            )
+            ax.scatter(t[ipk], rec[ipk], marker="o", edgecolors="k", facecolor="none")
 
             # slope
             slope, r, dt, dy = epsp_slope(t, rec, ipk, yf=rec_filt, return_pos=True)
@@ -77,31 +75,32 @@ def compare_plot(indice, labels, name="untitled", **kwargs):
         except ValueError:
             logger.error("unable to determine slope")
 
-    # final adjust
+    # labels
+    plt.xlabel("Time (s)")
+    plt.ylabel("Intensity (mV)")
     ax.legend()
 
     plt.savefig("{}.png".format(name), dpi=300)
     plt.waitforbuttonpress()
 
+"""
+compare_plot([(11, 123), (244, 254)], ["Baseline", "DNQX treatment"], "1_ampa_no-ampa")
+
+"""
+
+compare_plot(
+    [(11, 123), (441, 476)], ["Baseline", "Mg$^{2+}$ free ACSF"], "2_ampa_nmda"
+)
+
 
 """
 compare_plot(
-    [(11, 123), (124, 220)], ["Baseline", "Post-treatment"], "acsf+dnqx"
+    [(441, 476), (500, 537)], ["Baseline", "AP5 treatment"], "3_nmda_no-nmda"
 )
 """
 
-compare_plot(
-    [(224, 254), (255, 439)], ["Baseline", "Post-treatment"], "acsf(nmg)+dnqx"
-)
-
 """
 compare_plot(
-    [(441, 476), (477, 495)], ["Baseline", "Post-treatment"], "acsf(nmg)+dnqx+ap5"
-)
-"""
-
-"""
-compare_plot(
-    [(500, 537), (538, -1)], ["Baseline", "Post-treatment"], "acsf(nmg)+dnqx+ap5+ttx"
+    [(11, 123), (441, 476), (538, -1)], ["Baseline", "Mg$^{2+}$ free ACSF", "TTX treatment"], "4_ampa_nmda_none"
 )
 """

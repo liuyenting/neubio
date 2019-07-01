@@ -20,7 +20,7 @@ path = "../data/00_epsp/trial_1.h5"
 
 ### filter
 fs = 10e3
-lo_cutoff = 500
+lo_cutoff = 1e3
 
 ### plotter
 fig, ax = plt.subplots()
@@ -53,8 +53,12 @@ def main(index, name="filter_demo_sink"):
 
     ax.axhline(0, color="k", linestyle=":", linewidth=0.5)
 
-    # final adjust
+    # labels
     ax.legend()
+    plt.xlabel("Time (s)")
+    plt.ylabel("Intensity (mV)")
+
+    # final adjust
     ax.set_xlim(crop)
 
     plt.savefig("{}.png".format(name), dpi=300)
