@@ -2,7 +2,6 @@ import logging
 
 import coloredlogs
 import matplotlib.pyplot as plt
-from mpl_toolkits.axes_grid1.inset_locator import inset_axes
 import numpy as np
 
 from neubio.analyze import find_epsp_peak, epsp_slope
@@ -98,7 +97,7 @@ def dual_pulse_plot(index, name="untitled"):
     plt.savefig("{}.png".format(name), dpi=300)
     plt.waitforbuttonpress()
 
-#dual_pulse_plot((247, 300), "1_2p5_baseline")
+dual_pulse_plot((247, 300), "1_2p5_baseline")
 
 #dual_pulse_plot((301, 355), "2_0p5_applied")
 
