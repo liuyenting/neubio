@@ -23,6 +23,9 @@ path = "../data/02_calcium/trial_1.h5"
 fs = 10e3
 lo_cutoff = 1e3
 
+### plotter
+fig, ax = plt.subplots()
+
 
 def preprocess(index):
     # load data
@@ -73,11 +76,11 @@ def preprocess(index):
     )
 
 
-def ppr(index, r_min=.7):
+def extract_amplitudes(index, r_min=0.7):
     t, rec, rec_filt = preprocess(index)
 
     i = 0
-    ratio = []
+    amp = []
     for rec1_, rec_filt1_, rec2_, rec_filt2_ in zip(
         rec[0], rec_filt[0], rec[1], rec_filt[1]
     ):
@@ -88,8 +91,8 @@ def ppr(index, r_min=.7):
         if abs(r) < r_min:
             i += 1
             logger.warning("discarded new frame ({}), r={:.4f}, ".format(i, r))
-            continue
-        amp1 = rec1_[ipk]
+        else:
+            amp.append(rec1_[ipk])
 
         # using filtered signal to extract slope
         ipk, _ = find_epsp_peak(t, rec_filt2_)
@@ -98,20 +101,43 @@ def ppr(index, r_min=.7):
         if abs(r) < r_min:
             i += 1
             logger.warning("discarded new frame ({}), r={:.4f}, ".format(i, r))
-            continue
-        amp2 = rec2_[ipk]
-        
-        ratio.append(amp2/amp1)
+        else:
+            amp.append(rec2_[ipk])
 
-    return np.array(ratio)
+    return amp
 
 
 mapping = {0.5: (301, 355), 2.5: (247, 300), 5.0: (400, 462)}
 
+amp = []
 for conc, index in mapping.items():
-    ratio = ppr(index)
+    amp_ = extract_amplitudes(index)
+    amp.extend(amp_)
+amp = np.array(amp)
 
-    print("[Ca2+]={}".format(conc))
-    print(".. n={}".format(len(ratio)))
-    print(".. ratio={:.4f} +/- {:.4f}".format(ratio.mean(), ratio.std()))
-    print()
+print("n={}".format(len(amp)))
+print()
+
+# relative value
+amp = np.abs(amp)
+
+hist, edges = np.histogram(amp, bins=64)
+bins = (edges[:-1] + edges[1:])/2
+
+print(hist)
+
+# plot histogram
+plt.cla()
+ax.bar(bins, hist, width=0.05)
+
+# labels
+ax.legend()
+plt.xlabel('EPSP amplitdue (mV)')
+plt.ylabel('Counts')
+
+# final adjust
+_, xmax = ax.get_xlim()
+ax.set_xlim((0, xmax))
+
+plt.savefig("quantal.png", dpi=300)
+plt.waitforbuttonpress()
